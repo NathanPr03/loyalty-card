@@ -1,0 +1,32 @@
+openapi: 3.0.1
+info:
+  title: loyalty-card API
+  description: API to return discount percentage based on customer ID
+  version: 1.0.0
+paths:
+  /discount:
+    get:
+      summary: Get discount percentage for a customer
+      parameters:
+        - name: customerId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The ID of the customer
+      responses:
+        '200':
+          description: Discount percentage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  discount:
+                    type: number
+                    format: float
+                    example: 0.5
+        '400':
+          description: Invalid customer ID supplied
+        '404':
+          description: Customer not found

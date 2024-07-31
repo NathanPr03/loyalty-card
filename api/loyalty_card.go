@@ -18,7 +18,7 @@ func SetLoyaltyCard(w http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	if product.CustomerId == "" || product.LoyaltyCard {
+	if product.CustomerId == "" {
 		http.Error(w, "Customer ID and product discount cannot be empty", http.StatusBadRequest)
 		return
 	}

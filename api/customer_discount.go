@@ -56,7 +56,8 @@ func fetchCustomer(customerID int) (Customer, error) {
 	}
 
 	var customer Customer
-	query := "SELECT id, email, has_loyalty_card, total_purchases as SUM(customer_purchases.amount_purchased) FROM customer JOIN customer_purchases on customer.id = customer_purchases.customer_id WHERE id = $1"
+
+	query := "SELECT customer.id, email, has_loyalty_card, SUM(customer_purchases.amount_purchased) as total_purchases FROM customer JOIN customer_purchases on customer.id = customer_purchases.customer_id WHERE customer.id = $1 GROUP BY by customer.id"
 	row := dbConnection.QueryRow(query, customerID)
 	err = row.Scan(&customer.ID, &customer.Email, &customer.HasLoyaltyCard, &customer.TotalPurchases)
 

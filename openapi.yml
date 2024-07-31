@@ -30,3 +30,39 @@ paths:
           description: Invalid customer ID supplied
         '404':
           description: Customer not found
+  /loyaltyCard:
+    post:
+      summary: Set a customers~ loyalty card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                loyaltyCard:
+                  type: boolean
+              required:
+                - customerId
+                - loyaltyCard
+      responses:
+        '200':
+          description: Loyalty card set successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

@@ -38,7 +38,7 @@ func Discount(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "customer not found", http.StatusNotFound)
 		} else {
-			http.Error(w, "internal server error", http.StatusInternalServerError)
+			http.Error(w, "internal server error"+err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}

@@ -7,6 +7,5 @@
     { "src": "/api/", "dest": "/api/index.go"},
     { "src": "/api/discount", "dest": "/api/customer_discount.go"},
     { "src": "/api/loyaltyCard", "dest": "/api/loyalty_card.go"}
-
   ]
 }

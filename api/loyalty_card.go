@@ -10,11 +10,11 @@ import (
 )
 
 func SetLoyaltyCard(w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*z")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
 	if request.Method == http.MethodOptions {
-		println("Options request")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
@@ -50,10 +50,6 @@ func SetLoyaltyCard(w http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte(`{"message": "Loyalty card set successfully"}`))
 }

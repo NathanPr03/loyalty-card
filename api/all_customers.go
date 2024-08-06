@@ -53,6 +53,7 @@ func AllCustomers(w http.ResponseWriter, r *http.Request) {
 			ORDER BY SUM(amount_purchased) DESC
 			LIMIT 1
 		`
+		log.Printf("Customer is: %v", customer)
 		err := dbConnection.QueryRow(favoriteItemQuery, customer.ID).Scan(&customer.FavoriteItem)
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {

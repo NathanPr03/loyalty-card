@@ -66,3 +66,27 @@ paths:
                 properties:
                   error:
                     type: string
+  /customer:
+    get:
+      summary: Retrieve all customer data and their favorite items
+      responses:
+        '200':
+          description: List of all customers with their favorite items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    email:
+                      type: string
+                    has_loyalty_card:
+                      type: boolean
+                    favorite_item:
+                      type: string
+                      example: "Meatballs"
+        '404':
+          description: No customers found

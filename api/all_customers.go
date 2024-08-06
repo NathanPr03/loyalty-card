@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"github.com/NathanPr03/price-control/pkg/db"
 	"log"
 	"net/http"
@@ -37,13 +38,11 @@ func AllCustomers(w http.ResponseWriter, r *http.Request) {
 	// Iterate over each customer
 	for rows.Next() {
 		var customer BigCustomer
-		var hasLoyaltyCard int
-		if err := rows.Scan(&customer.ID, &customer.Email, &hasLoyaltyCard); err != nil {
+		if err := rows.Scan(&customer.ID, &customer.Email, &customer.HasLoyaltyCard); err != nil {
 			http.Error(w, "Failed to parse customer data", http.StatusInternalServerError)
 			log.Printf("Failed to scan row: %v", err)
 			return
 		}
-		customer.HasLoyaltyCard = hasLoyaltyCard == 1
 
 		// Query to find the customer's favorite item
 		favoriteItemQuery := `
@@ -56,7 +55,7 @@ func AllCustomers(w http.ResponseWriter, r *http.Request) {
 		`
 		err := dbConnection.QueryRow(favoriteItemQuery, customer.ID).Scan(&customer.FavoriteItem)
 		if err != nil {
-			if err == sql.ErrNoRows {
+			if errors.Is(err, sql.ErrNoRows) {
 				customer.FavoriteItem = "None" // Default value if no purchases are found
 			} else {
 				http.Error(w, "Failed to retrieve favorite item", http.StatusInternalServerError)

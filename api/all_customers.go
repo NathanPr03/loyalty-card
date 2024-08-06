@@ -48,7 +48,7 @@ func AllCustomers(w http.ResponseWriter, r *http.Request) {
 		favoriteItemQuery := `
 			SELECT product_purchased
 			FROM customer_purchases
-			WHERE customer_id = ?
+			WHERE customer_id = $1
 			GROUP BY product_purchased
 			ORDER BY SUM(amount_purchased) DESC
 			LIMIT 1

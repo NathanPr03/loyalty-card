@@ -76,8 +76,11 @@ func AllCustomers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Convert the slice of customers to JSON
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(customers); err != nil {
 		http.Error(w, "Failed to encode customers to JSON", http.StatusInternalServerError)
 		log.Printf("JSON encoding error: %v", err)

@@ -38,13 +38,17 @@ func Discount(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, sql.ErrNoRows) {
 			http.Error(w, "customer not found", http.StatusNotFound)
 		} else {
-			http.Error(w, "internal server error", http.StatusInternalServerError)
+			http.Error(w, "internal server error "+err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}
 
 	discount := calculateDiscount(customer)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(DiscountResponse{Discount: discount})
 }
 
@@ -56,7 +60,8 @@ func fetchCustomer(customerID int) (Customer, error) {
 	}
 
 	var customer Customer
-	query := "SELECT id, email, has_loyalty_card, total_purchases as SUM(customer_purchases.amount_purchased) FROM customer JOIN customer_purchases on customer.id = customer_purchases.customer_id WHERE id = $1"
+
+	query := "SELECT customer.id, email, has_loyalty_card, SUM(customer_purchases.amount_purchased) as total_purchases FROM customer JOIN customer_purchases on customer.id = customer_purchases.customer_id WHERE customer.id = $1 GROUP BY customer.id"
 	row := dbConnection.QueryRow(query, customerID)
 	err = row.Scan(&customer.ID, &customer.Email, &customer.HasLoyaltyCard, &customer.TotalPurchases)
 
